@@ -5,7 +5,7 @@ import cors from "@fastify/cors";
 
 const app = Fastify();
 const prisma = new PrismaClient();
-const port = 3333;
+const port = 8080;
 
 
 app.register(cors);
