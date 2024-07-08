@@ -1,34 +1,15 @@
-// Backend API RESTFUL
-import Fastify from "fastify";
-import { PrismaClient } from "@prisma/client";
-import cors from "@fastify/cors";
+import Fastify from 'fastify'
 
-const app = Fastify();
-const prisma = new PrismaClient();
-const port = 8080;
+const app = Fastify({
+  logger: true,
+})
 
+app.get('/', async (_, res) => {
+  return res.status(200).type('text/html').send("<p>Hello world!</p>")
+})
 
-app.register(cors);
-
-app.get("/", () => {
-  return JSON.stringify({ hello: "world" });
-});
-
-app.get("/hello", async () => {
-  const habits = await prisma.habit.findMany({
-    where: {
-      title: {
-        startsWith: "Beber Ba",
-      },
-    },
-  });
-  return habits;
-});
-
-app
-  .listen({
-    port: port,
-  })
-  .then(() => {
-    console.log(`Server running on port ${port}`);
-  });
+export default async function handler(req: any, res: any) {
+  await app.ready()
+  app.server.emit('request', req, res)
+}
+    
